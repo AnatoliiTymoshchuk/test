@@ -1,4 +1,4 @@
-variable "resourcename" {
+varadsfasidhfiable "resourcename" {
 default = "terraformResourceGroup"
 }
 
