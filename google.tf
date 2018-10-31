@@ -1,6 +1,6 @@
 {
   "provider": {
-    "dsfgaws" : {
+    "aws" : {
        "region": "eu-central-1"
     }
   },  
