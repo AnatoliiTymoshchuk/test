@@ -4,7 +4,7 @@
        "region": "eu-central-1"
     }
   },  
- фівафвіа "фвіаresource": {
+ "resource": {
     "aws_instance": {
         "test_VM": {
          "ami": "ami-657bd20a",
