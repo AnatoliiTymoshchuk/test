@@ -17,7 +17,7 @@
   },
   "variable": {
     "vm_name": {
-      "default": "",
+   
       "description": "Name for VM to be created"
     }
   }
