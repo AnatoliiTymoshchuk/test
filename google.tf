@@ -17,7 +17,7 @@
   },
   "variable": {
     "vm_name": {
-      "description": "Name is name"
+      "description": "Name is name qwerty"
     }
   }
 }
