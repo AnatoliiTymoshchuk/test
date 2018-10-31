@@ -17,7 +17,7 @@
   },
   "variable": {
     "vm_name": {
-      "default": "m3test",
+      "default": "",
       "description": "Name for VM to be created"
     }
   }
