@@ -1,4 +1,25 @@
+# Configure the Microsoft Azure Provider
+provider "azurerm" { }
 
+# Create a resource group if it doesn’t exist
+resource "azurerm_resource_group" "myterraformgroup" {
+    name     = "${var.resourcename}"
+    location = "East US"
+
+    tags {
+        environment = "${var.default_environment_tag}"
+    }
+}
+
+# Create virtual network
+resource "azurerm_virtual_network" "myterraformnetwork" {
+    name                = "myDemoVnet"
+    address_space       = ["10.0.0.0/16"]
+    location            = "East US"
+    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
+
+    tags {
+        environment = "${var.default_environment_tag}"
     }
 }
 
