@@ -1,4 +1,29 @@
+# Configure the Microsoft Azure Provider
+provider "azurerm" { }
 
+# Create a resource group if it doesn’t exist
+resource "azurerm_resource_group" "myterraformgroup" {
+    name     = "${var.resourcename}"
+    location = "East US"
+
+    tags {
+        environment = "${var.default_environment_tag}"
+    }
+}
+
+# Create virtual network
+resource "azurerm_virtual_network" "myterraformnetwork" {
+    name                = "myDemoVnet"
+    address_space       = ["10.0.0.0/16"]
+    location            = "East US"
+    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
+
+    tags {
+        environment = "${var.default_environment_tag}"
+    }
+}
+
+# Create subnet
 resource "azurerm_subnet" "myterraformsubnet" {
     name                 = "myDemoSubnet"
     resource_group_name  = "${azurerm_resource_group.myterraformgroup.name}"
@@ -39,66 +64,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     tags {
         environment = "${var.default_environment_tag}"
     }
-}
 
-# Create network interface
-resource "azurerm_network_interface" "myterraformnic" {
-    name                      = "myDemoNIC"
-    location                  = "East US"
-    resource_group_name       = "${azurerm_resource_group.myterraformgroup.name}"
-    network_security_group_id = "${azurerm_network_security_group.myterraformnsg.id}"
-
-    ip_configuration {
-        name                          = "myNicConfiguration"
-        subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
-        private_ip_address_allocation = "dynamic"
-        public_ip_address_id          = "${azurerm_public_ip.myterraformpublicip.id}"
-    }
-
-    tags {
-        environment = "${var.default_environment_tag}"
-    }
-}
-
-# Generate random text for a unique storage account name
-resource "random_id" "randomId" {
-    keepers = {
-        # Generate a new ID only when a new resource group is defined
-        resource_group = "${azurerm_resource_group.myterraformgroup.name}"
-    }
-
-    byte_length = 8
-}
-
-# Create storage account for boot diagnostics
-resource "azurerm_storage_account" "mystorageaccount" {
-    name                        = "diag${random_id.randomId.hex}"
-    resource_group_name         = "${azurerm_resource_group.myterraformgroup.name}"
-    location                    = "East US"
-    account_tier                = "Standard"
-    account_replication_type    = "LRS"
-
-    tags {
-        environment = "${var.default_environment_tag}"
-    }
-}
-
-# Create a random generator for VM names
-resource "random_id" "serverName" {
-  byte_length = 6
-  prefix = "i-"
-}
-
-# Create a random generator for VM names
-resource "random_id" "osDiskname" {
-  byte_length = 6
-  prefix = "disk-"
-}
-
-# Create virtual machine
-resource "azurerm_virtual_machine" "myterraformvm" {
-    name                  = "${random_id.serverName.hex}"
-    location              = "East US"
     resource_group_name   = "${azurerm_resource_group.myterraformgroup.name}"
     network_interface_ids = ["${azurerm_network_interface.myterraformnic.id}"]
     vm_size               = "Standard_DS1_v2"
