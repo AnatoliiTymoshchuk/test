@@ -1,7 +1,5 @@
 # Configure the Microsoft Azure Provider
 
-
-
 provider "azurerm" { }
 
 # Create a resource group if it doesn’t exist
